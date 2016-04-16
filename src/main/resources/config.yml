@@ -1,0 +1,10 @@
+# ** World names are case sensitive **
+ALL:
+  Player:
+    - 'VOID'
+
+world:
+  Player:
+    - 'LAVA'
+  Entity:
+    - ''
