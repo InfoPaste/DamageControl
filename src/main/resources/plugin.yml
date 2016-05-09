@@ -2,7 +2,6 @@
  version: 1.0.2
  description: Control damage
  author: InfoPaste
- website: https://www.spigotmc.org/resources/ehub.15577/
 
  main: me.InfoPaste.DamageControl.Main
  database: false
