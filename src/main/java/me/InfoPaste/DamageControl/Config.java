@@ -6,9 +6,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
-/**
- * Created by brookslab on 3/23/2016.
- */
 public class Config {
 
     Main plugin;
