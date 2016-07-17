@@ -7,48 +7,35 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 public class Main extends JavaPlugin implements Listener {
 
-    public static Main plugin;
-
-    String worldNames[];
-
     @Override
     public void onEnable() {
 
         Config.setup(this);
 
-        worldNames = new String[Bukkit.getServer().getWorlds().size()];
-
-        int count = 0;
-
-        for (World w : Bukkit.getServer().getWorlds()) {
-            worldNames[count] = w.getName();
-            count++;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (World world : Bukkit.getWorlds()) {
+            stringBuilder.append(world.getName()).append(", ");
         }
+        String worldsFound = stringBuilder.toString();
 
-        for (String s : worldNames) {
-            getLogger().info("World Found: " + s);
-        }
-    }
-
-    @Override
-    public void onDisable() {
-        plugin = null;
+        getLogger().info("Worlds: " + worldsFound.substring(0, worldsFound.length() - 2));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDamage(EntityDamageEvent event) {
 
+        DamageCause damageCause = event.getCause();
 
-        EntityDamageEvent.DamageCause damageCause = event.getCause();
         String world = event.getEntity().getLocation().getWorld().getName();
 
-        if (Config.config.contains(event.getEntity().getLocation().getWorld().getName())
+        if (Config.config.contains(world)
                 || Config.config.contains("ALL")) {
 
             String path;
@@ -67,13 +54,11 @@ public class Main extends JavaPlugin implements Listener {
                     return;
                 }
 
-                for (int i = 0; i < damages.size(); i++) {
-
-                    if (damages.get(i).equalsIgnoreCase(null)) {
-                    } else if (damages.get(i).equalsIgnoreCase("all")) {
+                for (String damage : damages) {
+                    if (damage.equalsIgnoreCase("all")) {
                         event.setCancelled(true);
                         return;
-                    } else if (EntityDamageEvent.DamageCause.valueOf(damages.get(i).toUpperCase()) == damageCause) {
+                    } else if (DamageCause.valueOf(damage.toUpperCase()) == damageCause) {
                         event.setCancelled(true);
                     }
                 }
